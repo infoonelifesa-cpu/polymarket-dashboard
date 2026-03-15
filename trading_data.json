@@ -1,87 +1,197 @@
 {
   "mode": "paper",
-  "last_updated": "2026-03-15T15:00:00Z",
-  "balance": 513.12,
-  "deployed": 6.10,
+  "last_updated": "2026-03-15T15:18:02.424722+00:00",
+  "balance": 520.06,
+  "deployed": 0,
   "starting_balance": 500,
-  "total_pnl": 19.22,
+  "total_pnl": 20.06,
   "win_rate": 1.0,
-  "total_trades": 15,
-  "positions": [
-    {
-      "question": "Bitcoin Up or Down - March 15, 3:00PM-3:05PM ET",
-      "side": "YES",
-      "entry_price": 0.45,
-      "amount": 3.05,
-      "strategy": "ws_negative_risk",
-      "opened_at": "2026-03-15T14:00:00Z"
-    },
-    {
-      "question": "Bitcoin Up or Down - March 15, 3:00PM-3:05PM ET",
-      "side": "NO",
-      "entry_price": 0.52,
-      "amount": 3.05,
-      "strategy": "ws_negative_risk",
-      "opened_at": "2026-03-15T14:01:00Z"
-    }
-  ],
+  "total_trades": 18,
+  "positions": [],
   "settled_pairs": [
     {
-      "question": "Bitcoin Up or Down - March 15, 9:30AM-9:35AM ET",
-      "net_pnl": 1.90,
+      "question": "Bitcoin Up or Down - March 15, 10:30AM-10:45AM ET",
+      "net_pnl": 0.07,
       "winner": "UP",
-      "total_cost": 48.20,
-      "settled_at": "2026-03-15T14:35:00Z",
-      "shares": 50
+      "total_cost": 2.6,
+      "shares": 2.7,
+      "settled_at": "2026-03-15T15:04:26.773232+00:00",
+      "legs": 2
     },
     {
-      "question": "Bitcoin Up or Down - March 15, 9:35AM-9:40AM ET",
-      "net_pnl": 2.15,
+      "question": "Bitcoin Up or Down - March 15, 10:35AM-10:40AM ET",
+      "net_pnl": 0.47,
+      "winner": "UP",
+      "total_cost": 18.4,
+      "shares": 18.9,
+      "settled_at": "2026-03-15T14:50:17.457165+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 10:10AM-10:15AM ET",
+      "net_pnl": 0.29,
       "winner": "DOWN",
-      "total_cost": 47.85,
-      "settled_at": "2026-03-15T14:40:00Z",
-      "shares": 50
+      "total_cost": 6.1,
+      "shares": 6.4,
+      "settled_at": "2026-03-15T14:23:59.942747+00:00",
+      "legs": 2
     },
     {
-      "question": "Bitcoin Up or Down - March 15, 9:40AM-9:45AM ET (hedge)",
-      "net_pnl": -0.50,
-      "winner": "UP",
-      "total_cost": 48.50,
-      "settled_at": "2026-03-15T14:45:00Z",
-      "shares": 50
+      "question": "Bitcoin Up or Down - March 15, 10:05AM-10:10AM ET",
+      "net_pnl": 5.85,
+      "winner": "DOWN",
+      "total_cost": 100.0,
+      "shares": 105.9,
+      "settled_at": "2026-03-15T14:18:43.624154+00:00",
+      "legs": 2
     },
     {
-      "question": "Bitcoin Up or Down - March 15, 9:45AM-9:50AM ET",
-      "net_pnl": 3.20,
+      "question": "Bitcoin Up or Down - March 15, 10:00AM-10:05AM ET",
+      "net_pnl": 0.28,
       "winner": "UP",
-      "total_cost": 46.80,
-      "settled_at": "2026-03-15T14:50:00Z",
-      "shares": 50
+      "total_cost": 10.9,
+      "shares": 11.2,
+      "settled_at": "2026-03-15T14:13:28.462066+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:30AM-9:35AM ET",
+      "net_pnl": 1.9,
+      "winner": "DOWN",
+      "total_cost": 73.7,
+      "shares": 75.6,
+      "settled_at": "2026-03-15T13:42:34.711919+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:25AM-9:30AM ET",
+      "net_pnl": 0.98,
+      "winner": "DOWN",
+      "total_cost": 20.67,
+      "shares": 21.6,
+      "settled_at": "2026-03-15T13:39:38.262320+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:20AM-9:25AM ET",
+      "net_pnl": 2.41,
+      "winner": "UP",
+      "total_cost": 29.53,
+      "shares": 31.9,
+      "settled_at": "2026-03-15T13:34:54.632785+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:00AM-9:15AM ET",
+      "net_pnl": 0.21,
+      "winner": "UP",
+      "total_cost": 8.28,
+      "shares": 8.5,
+      "settled_at": "2026-03-15T13:33:39.026805+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:15AM-9:20AM ET",
+      "net_pnl": 2.09,
+      "winner": "UP",
+      "total_cost": 80.95,
+      "shares": 83.0,
+      "settled_at": "2026-03-15T13:32:09.412501+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:10AM-9:15AM ET",
+      "net_pnl": 0.26,
+      "winner": "DOWN",
+      "total_cost": 7.24,
+      "shares": 7.5,
+      "settled_at": "2026-03-15T13:25:54.702299+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:05AM-9:10AM ET",
+      "net_pnl": 0.1,
+      "winner": "UP",
+      "total_cost": 2.65,
+      "shares": 2.7,
+      "settled_at": "2026-03-15T13:19:35.638196+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 8:35AM-8:40AM ET",
+      "net_pnl": 0.64,
+      "winner": "DOWN",
+      "total_cost": 6.1,
+      "shares": 6.7,
+      "settled_at": "2026-03-15T13:17:56.313638+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 8:15AM-8:30AM ET",
+      "net_pnl": 0.77,
+      "winner": "DOWN",
+      "total_cost": 29.82,
+      "shares": 30.6,
+      "settled_at": "2026-03-15T13:17:56.004551+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 8:10AM-8:15AM ET",
+      "net_pnl": 0.43,
+      "winner": "UP",
+      "total_cost": 16.61,
+      "shares": 17.0,
+      "settled_at": "2026-03-15T13:17:55.666881+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 8:00AM-8:05AM ET",
+      "net_pnl": 0.94,
+      "winner": "DOWN",
+      "total_cost": 25.71,
+      "shares": 26.6,
+      "settled_at": "2026-03-15T13:17:55.349628+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 7:45AM-7:50AM ET",
+      "net_pnl": 1.47,
+      "winner": "UP",
+      "total_cost": 40.26,
+      "shares": 41.7,
+      "settled_at": "2026-03-15T13:17:55.031965+00:00",
+      "legs": 2
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 7:40AM-7:45AM ET",
+      "net_pnl": 0.89,
+      "winner": "UP",
+      "total_cost": 3.22,
+      "shares": 4.1,
+      "settled_at": "2026-03-15T13:17:54.685335+00:00",
+      "legs": 1
     }
   ],
   "equity_history": [
-    {"time": "2026-03-15T09:00:00Z", "equity": 500.00},
-    {"time": "2026-03-15T09:35:00Z", "equity": 501.90},
-    {"time": "2026-03-15T09:40:00Z", "equity": 504.05},
-    {"time": "2026-03-15T09:45:00Z", "equity": 503.55},
-    {"time": "2026-03-15T09:50:00Z", "equity": 506.75},
-    {"time": "2026-03-15T10:00:00Z", "equity": 508.10},
-    {"time": "2026-03-15T11:00:00Z", "equity": 511.40},
-    {"time": "2026-03-15T12:00:00Z", "equity": 513.80},
-    {"time": "2026-03-15T13:00:00Z", "equity": 516.20},
-    {"time": "2026-03-15T14:00:00Z", "equity": 517.90},
-    {"time": "2026-03-15T15:00:00Z", "equity": 519.22}
+    {
+      "time": "2026-03-15T15:12:44.259731+00:00",
+      "equity": 520.06
+    },
+    {
+      "time": "2026-03-15T15:18:02.424722+00:00",
+      "equity": 520.06
+    }
   ],
   "bots": {
     "local": {
       "running": true,
       "pid": 1328,
-      "last_scan": "2026-03-15T15:00:00Z"
+      "last_scan": "2026-03-15T15:18:02.424722+00:00"
     },
     "nyc": {
       "running": true,
-      "pid": 9967,
-      "last_scan": "2026-03-15T15:00:00Z"
+      "pid": 11572,
+      "last_scan": "2026-03-15T15:18:02.424722+00:00"
     }
   }
 }

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polymarket Trading Dashboard</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0a;--card:#1a1a2e;--border:#2a2a3e;--text:#e0e0e0;--muted:#888;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b;--accent:#6366f1}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100}
+.header-left{display:flex;align-items:center;gap:12px}
+.header h1{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.mode-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.mode-badge.paper{background:rgba(245,158,11,.12);color:var(--yellow);border:1px solid rgba(245,158,11,.25)}
+.mode-badge.live{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.mode-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.header-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.last-updated{font-size:11px;color:var(--muted)}
+.refresh-btn{background:#232338;border:1px solid var(--border);color:var(--text);padding:5px 11px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;transition:background .15s;display:flex;align-items:center;gap:5px}
+.refresh-btn:hover{background:#2a2a45}
+.countdown{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.container{max-width:1400px;margin:0 auto;padding:22px 24px;display:flex;flex-direction:column;gap:20px}
+.error-banner{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red);padding:10px 16px;border-radius:8px;font-size:13px;display:none}
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+.kpi-card.g::after{background:var(--green)}.kpi-card.r::after{background:var(--red)}.kpi-card.b::after{background:var(--blue)}.kpi-card.y::after{background:var(--yellow)}
+.kpi-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.9px;margin-bottom:8px}
+.kpi-value{font-size:26px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;line-height:1;margin-bottom:5px}
+.kpi-value.pos{color:var(--green)}.kpi-value.neg{color:var(--red)}
+.kpi-sub{font-size:11px;color:var(--muted)}
+.section{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.section-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.section-title{font-size:13px;font-weight:600;color:#fff;display:flex;align-items:center;gap:7px}
+.badge{background:#232338;border:1px solid var(--border);padding:1px 8px;border-radius:10px;font-size:11px;color:var(--muted)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{padding:9px 16px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;background:rgba(0,0,0,.25);border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(42,42,62,.5);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.025)}
+tbody td{padding:11px 16px;vertical-align:middle}
+.empty{padding:36px;text-align:center;color:var(--muted);font-size:13px}
+.chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;white-space:nowrap}
+.chip-yes{background:rgba(34,197,94,.12);color:var(--green)}
+.chip-no{background:rgba(239,68,68,.12);color:var(--red)}
+.chip-strat{background:rgba(99,102,241,.12);color:var(--accent);font-weight:500}
+.chip-winner{background:rgba(59,130,246,.12);color:var(--blue);font-weight:600}
+.pos-pnl{color:var(--green);font-weight:600}.neg-pnl{color:var(--red);font-weight:600}.zer-pnl{color:var(--muted);font-weight:600}
+.q-text{max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-text{white-space:nowrap;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.chart-wrap{padding:18px 18px 10px}
+.chart-svg{width:100%;height:180px;display:block;overflow:visible}
+.bot-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px}
+.bot-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.bot-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.bot-icon.on{background:rgba(34,197,94,.12)}.bot-icon.off{background:rgba(239,68,68,.12)}
+.bot-name{font-size:13px;font-weight:600;color:#fff;margin-bottom:2px}
+.bot-status{font-size:12px;font-weight:600;margin-bottom:3px}
+.bot-status.on{color:var(--green)}.bot-status.off{color:var(--red)}
+.bot-meta{font-size:11px;color:var(--muted)}
+.spinner-wrap{display:flex;justify-content:center;align-items:center;padding:40px}
+.spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:860px){.kpi-strip{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.container{padding:14px;gap:14px}.kpi-strip{grid-template-columns:repeat(2,1fr);gap:10px}.kpi-value{font-size:22px}.bot-grid{grid-template-columns:1fr}.header{padding:10px 14px}.header h1{font-size:14px}}
+@media(max-width:360px){.kpi-strip{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <h1>&#x1F4C8; Polymarket Trading Dashboard</h1>
+    <span class="mode-badge paper" id="modeBadge">
+      <span class="mode-dot"></span>
+      <span id="modeText">PAPER</span>
+    </span>
+  </div>
+  <div class="header-right">
+    <span class="last-updated" id="lastUpdated">&#8212;</span>
+    <button class="refresh-btn" onclick="loadData()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Refresh
+    </button>
+    <span class="countdown" id="countdown">next: 60s</span>
+  </div>
+</header>
+<div class="container">
+  <div class="error-banner" id="errBanner"></div>
+  <div class="kpi-strip">
+    <div class="kpi-card b">
+      <div class="kpi-label">Total Equity</div>
+      <div class="kpi-value" id="kEquity">&#8212;</div>
+      <div class="kpi-sub" id="kEquitySub">balance + deployed</div>
+    </div>
+    <div class="kpi-card" id="kPnlCard">
+      <div class="kpi-label">Realized P&amp;L</div>
+      <div class="kpi-value" id="kPnl">&#8212;</div>
+      <div class="kpi-sub" id="kPnlSub">vs starting balance</div>
+    </div>
+    <div class="kpi-card y">
+      <div class="kpi-label">Win Rate</div>
+      <div class="kpi-value" id="kWinRate">&#8212;</div>
+      <div class="kpi-sub" id="kWinSub">settled trades</div>
+    </div>
+    <div class="kpi-card b">
+      <div class="kpi-label">Open Positions</div>
+      <div class="kpi-value" id="kOpen">&#8212;</div>
+      <div class="kpi-sub">active trades</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Cumulative Equity
+      </span>
+    </div>
+    <div class="chart-wrap">
+      <svg class="chart-svg" id="equityChart" viewBox="0 0 800 180" preserveAspectRatio="none">
+        <text x="400" y="95" text-anchor="middle" fill="#555" font-size="13" font-family="system-ui">Loading&#8230;</text>
+      </svg>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Open Positions
+      </span>
+      <span class="badge" id="posCount">0</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Question</th><th>Side</th><th>Entry</th><th>Deployed</th><th>Strategy</th><th>Opened</th></tr></thead>
+        <tbody id="posBody"><tr><td colspan="6" class="empty">No open positions</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Settled Trades
+      </span>
+      <span class="badge" id="settledCount">0</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Question</th><th>Net P&amp;L</th><th>Winner</th><th>Total Cost</th><th>Settled</th></tr></thead>
+        <tbody id="settledBody"><tr><td colspan="5" class="empty">No settled trades yet</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Bot Status
+      </span>
+    </div>
+    <div class="bot-grid" id="botGrid">
+      <div class="spinner-wrap"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+<script>
+var REFRESH_INTERVAL = 60;
+var countdown = REFRESH_INTERVAL;
+var cdTimer = null;
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtUSD(v,dp){
+  dp=(dp===undefined)?2:dp;
+  var n=parseFloat(v)||0;
+  return '$'+n.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+}
+function fmtPct(v){return (parseFloat(v)*100).toFixed(1)+'%';}
+function fmtDT(iso){
+  if(!iso)return '—';
+  try{
+    var d=new Date(iso);
+    return d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false});
+  }catch(e){return iso;}
+}
+function fmtAgo(iso){
+  if(!iso)return '—';
+  try{
+    var d=new Date(iso);
+    var s=Math.floor((Date.now()-d)/1000);
+    if(s<60)return s+'s ago';
+    if(s<3600)return Math.floor(s/60)+'m ago';
+    if(s<86400)return Math.floor(s/3600)+'h ago';
+    return fmtDT(iso);
+  }catch(e){return iso;}
+}
+function stripHedge(q){return String(q||'').replace(/\s*\(hedge\)\s*$/i,'').trim();}
+function trunc(s,n){s=String(s||'');return s.length>n?s.slice(0,n)+'…':s;}
+
+function updateHeader(d){
+  var mode=(d.mode||'paper').toLowerCase();
+  var badge=document.getElementById('modeBadge');
+  badge.className='mode-badge '+mode;
+  document.getElementById('modeText').textContent=mode.toUpperCase();
+  document.getElementById('lastUpdated').textContent='Data: '+fmtDT(d.last_updated);
+}
+
+function updateKPIs(d){
+  var equity=(parseFloat(d.balance)||0)+(parseFloat(d.deployed)||0);
+  document.getElementById('kEquity').textContent=fmtUSD(equity);
+  document.getElementById('kEquitySub').textContent=fmtUSD(d.balance)+' cash + '+fmtUSD(d.deployed)+' deployed';
+  var pnl=parseFloat(d.total_pnl)||0;
+  var pnlEl=document.getElementById('kPnl');
+  var pnlCard=document.getElementById('kPnlCard');
+  pnlEl.textContent=(pnl>=0?'+':'')+fmtUSD(pnl);
+  pnlEl.className='kpi-value '+(pnl>0?'pos':pnl<0?'neg':'');
+  pnlCard.className='kpi-card '+(pnl>0?'g':pnl<0?'r':'b');
+  var start=parseFloat(d.starting_balance)||0;
+  var pct=start>0?((pnl/start)*100).toFixed(2):'0.00';
+  document.getElementById('kPnlSub').textContent=(pnl>=0?'+':'')+pct+'% vs '+fmtUSD(start);
+  document.getElementById('kWinRate').textContent=fmtPct(d.win_rate||0);
+  document.getElementById('kWinSub').textContent=(d.total_trades||0)+' total trades';
+  var pos=Array.isArray(d.positions)?d.positions.length:0;
+  document.getElementById('kOpen').textContent=pos;
+}
+
+function updatePositions(d){
+  var pos=Array.isArray(d.positions)?d.positions:[];
+  document.getElementById('posCount').textContent=pos.length;
+  var tb=document.getElementById('posBody');
+  if(!pos.length){tb.innerHTML='<tr><td colspan="6" class="empty">No open positions</td></tr>';return;}
+  tb.innerHTML=pos.map(function(p){
+    var side=(p.side||'').toUpperCase();
+    var entry=parseFloat(p.entry_price)||0;
+    return '<tr>'+
+      '<td><div class="q-text" title="'+esc(p.question)+'">'+esc(trunc(p.question,65))+'</div></td>'+
+      '<td><span class="chip chip-'+(side==='YES'?'yes':'no')+'">'+esc(side)+'</span></td>'+
+      '<td>'+(entry*100).toFixed(1)+'&cent;</td>'+
+      '<td>'+fmtUSD(p.amount)+'</td>'+
+      '<td><span class="chip chip-strat">'+esc(p.strategy||'—')+'</span></td>'+
+      '<td class="t-text">'+fmtDT(p.opened_at)+'</td>'+
+      '</tr>';
+  }).join('');
+}
+
+function updateSettled(d){
+  var pairs=Array.isArray(d.settled_pairs)?d.settled_pairs.slice():[];
+  pairs.sort(function(a,b){return new Date(b.settled_at)-new Date(a.settled_at);});
+  pairs=pairs.slice(0,50);
+  document.getElementById('settledCount').textContent=pairs.length;
+  var tb=document.getElementById('settledBody');
+  if(!pairs.length){tb.innerHTML='<tr><td colspan="5" class="empty">No settled trades yet</td></tr>';return;}
+  tb.innerHTML=pairs.map(function(p){
+    var pnl=parseFloat(p.net_pnl)||0;
+    var cls=pnl>0?'pos-pnl':pnl<0?'neg-pnl':'zer-pnl';
+    var q=stripHedge(p.question);
+    return '<tr>'+
+      '<td><div class="q-text" title="'+esc(q)+'">'+esc(trunc(q,65))+'</div></td>'+
+      '<td class="'+cls+'">'+(pnl>=0?'+':'')+fmtUSD(pnl)+'</td>'+
+      '<td><span class="chip chip-winner">'+esc(p.winner||'—')+'</span></td>'+
+      '<td>'+fmtUSD(p.total_cost)+'</td>'+
+      '<td class="t-text">'+fmtDT(p.settled_at)+'</td>'+
+      '</tr>';
+  }).join('');
+}
+
+function updateChart(d){
+  var svg=document.getElementById('equityChart');
+  var hist=Array.isArray(d.equity_history)?d.equity_history:[];
+  if(hist.length<2){
+    svg.innerHTML='<text x="400" y="95" text-anchor="middle" fill="#555" font-size="13" font-family="system-ui">'+(hist.length===0?'No equity history yet':'Need \u22652 data points to draw chart')+'</text>';
+    return;
+  }
+  var W=800,H=180,L=64,R=20,T=14,B=30;
+  var cW=W-L-R,cH=H-T-B;
+  var pts=hist.map(function(h){return{t:new Date(h.time).getTime(),v:parseFloat(h.equity)||0};})
+    .filter(function(h){return !isNaN(h.t);})
+    .sort(function(a,b){return a.t-b.t;});
+  if(pts.length<2){svg.innerHTML='<text x="400" y="95" text-anchor="middle" fill="#555" font-size="13" font-family="system-ui">Insufficient data</text>';return;}
+  var minT=pts[0].t,maxT=pts[pts.length-1].t;
+  var vals=pts.map(function(p){return p.v;});
+  var minV=Math.min.apply(null,vals),maxV=Math.max.apply(null,vals);
+  var pad=(maxV-minV)*0.1||10;
+  minV-=pad;maxV+=pad;
+  var rangeV=maxV-minV||1,rangeT=maxT-minT||1;
+  function px(t){return L+((t-minT)/rangeT)*cW;}
+  function py(v){return T+cH-((v-minV)/rangeV)*cH;}
+  /* grid */
+  var gl='',yl='';
+  for(var i=0;i<=4;i++){
+    var frac=i/4;
+    var val=minV+frac*rangeV;
+    var y=T+cH-frac*cH;
+    gl+='<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="#2a2a3e" stroke-width="1"/>';
+    yl+='<text x="'+(L-6)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" fill="#666" font-size="10" font-family="system-ui">$'+val.toFixed(0)+'</text>';
+  }
+  /* x labels */
+  var xi=[0,Math.floor(pts.length/2),pts.length-1],xl='';
+  xi.forEach(function(idx){
+    var p=pts[idx];
+    var lbl=fmtDT(new Date(p.t).toISOString());
+    xl+='<text x="'+px(p.t).toFixed(1)+'" y="'+(H-4)+'" text-anchor="middle" fill="#555" font-size="9" font-family="system-ui">'+esc(lbl)+'</text>';
+  });
+  /* line path */
+  var polyPts=pts.map(function(p){return px(p.t).toFixed(1)+','+py(p.v).toFixed(1);}).join(' ');
+  var fx=px(pts[0].t).toFixed(1),lx=px(pts[pts.length-1].t).toFixed(1),by=(T+cH).toFixed(1);
+  var areaPath='M '+fx+','+by+' L '+polyPts+' L '+lx+','+by+' Z';
+  var isUp=pts[pts.length-1].v>=pts[0].v;
+  var lineColor=isUp?'#22c55e':'#ef4444';
+  var areaId='areaGrad'+Date.now();
+  var gradDef='<defs><linearGradient id="'+areaId+'" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0%" stop-color="'+lineColor+'" stop-opacity="0.25"/>'
+    +'<stop offset="100%" stop-color="'+lineColor+'" stop-opacity="0.02"/>'
+    +'</linearGradient></defs>';
+  svg.innerHTML=gradDef+gl+yl+xl
+    +'<path d="'+areaPath+'" fill="url(#'+areaId+')" />'
+    +'<polyline points="'+polyPts+'" fill="none" stroke="'+lineColor+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'
+    +'<circle cx="'+px(pts[pts.length-1].t).toFixed(1)+'" cy="'+py(pts[pts.length-1].v).toFixed(1)+'" r="4" fill="'+lineColor+'" stroke="var(--card)" stroke-width="2"/>';
+}
+
+function updateBots(d){
+  var bots=d.bots||{};
+  var names=['local','nyc'];
+  var labels={local:'Local Bot',nyc:'NYC Bot'};
+  var icons={local:'&#x1F4BB;',nyc:'&#x1F30E;'};
+  var html='';
+  names.forEach(function(key){
+    var b=bots[key]||{};
+    var running=!!b.running;
+    var cls=running?'on':'off';
+    var statusText=running?'Running':'Stopped';
+    var pidStr=b.pid?'PID: '+b.pid:'';
+    var lastScan=b.last_scan?'Last scan: '+fmtAgo(b.last_scan):'No scan recorded';
+    html+='<div class="bot-card">'
+      +'<div class="bot-icon '+cls+'">'+icons[key]+'</div>'
+      +'<div>'
+      +'<div class="bot-name">'+labels[key]+'</div>'
+      +'<div class="bot-status '+cls+'">&#x25CF; '+statusText+'</div>'
+      +'<div class="bot-meta">'+(pidStr?pidStr+' &nbsp;&middot;&nbsp; ':'')+lastScan+'</div>'
+      +'</div>'
+      +'</div>';
+  });
+  document.getElementById('botGrid').innerHTML=html;
+}
+
+function render(d){
+  updateHeader(d);
+  updateKPIs(d);
+  updatePositions(d);
+  updateSettled(d);
+  updateChart(d);
+  updateBots(d);
+}
+
+function showError(msg){
+  var el=document.getElementById('errBanner');
+  el.textContent=msg;
+  el.style.display='block';
+}
+function hideError(){
+  document.getElementById('errBanner').style.display='none';
+}
+
+function loadData(){
+  hideError();
+  fetch('trading_data.json?_='+Date.now())
+    .then(function(r){
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return r.json();
+    })
+    .then(function(d){
+      render(d);
+      document.getElementById('lastUpdated').textContent='Data: '+fmtDT(d.last_updated)+' (fetched '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false})+')';
+    })
+    .catch(function(e){
+      showError('Failed to load trading_data.json — '+e.message+'. Make sure the file exists and you are serving this over HTTP (not file://).');
+    });
+  resetCountdown();
+}
+
+function resetCountdown(){
+  countdown=REFRESH_INTERVAL;
+  if(cdTimer)clearInterval(cdTimer);
+  cdTimer=setInterval(function(){
+    countdown--;
+    document.getElementById('countdown').textContent='next: '+countdown+'s';
+    if(countdown<=0){
+      loadData();
+    }
+  },1000);
+}
+
+loadData();
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+{
+  "mode": "paper",
+  "last_updated": "2026-03-15T15:00:00Z",
+  "balance": 513.12,
+  "deployed": 6.10,
+  "starting_balance": 500,
+  "total_pnl": 19.22,
+  "win_rate": 1.0,
+  "total_trades": 15,
+  "positions": [
+    {
+      "question": "Bitcoin Up or Down - March 15, 3:00PM-3:05PM ET",
+      "side": "YES",
+      "entry_price": 0.45,
+      "amount": 3.05,
+      "strategy": "ws_negative_risk",
+      "opened_at": "2026-03-15T14:00:00Z"
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 3:00PM-3:05PM ET",
+      "side": "NO",
+      "entry_price": 0.52,
+      "amount": 3.05,
+      "strategy": "ws_negative_risk",
+      "opened_at": "2026-03-15T14:01:00Z"
+    }
+  ],
+  "settled_pairs": [
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:30AM-9:35AM ET",
+      "net_pnl": 1.90,
+      "winner": "UP",
+      "total_cost": 48.20,
+      "settled_at": "2026-03-15T14:35:00Z",
+      "shares": 50
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:35AM-9:40AM ET",
+      "net_pnl": 2.15,
+      "winner": "DOWN",
+      "total_cost": 47.85,
+      "settled_at": "2026-03-15T14:40:00Z",
+      "shares": 50
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:40AM-9:45AM ET (hedge)",
+      "net_pnl": -0.50,
+      "winner": "UP",
+      "total_cost": 48.50,
+      "settled_at": "2026-03-15T14:45:00Z",
+      "shares": 50
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 9:45AM-9:50AM ET",
+      "net_pnl": 3.20,
+      "winner": "UP",
+      "total_cost": 46.80,
+      "settled_at": "2026-03-15T14:50:00Z",
+      "shares": 50
+    }
+  ],
+  "equity_history": [
+    {"time": "2026-03-15T09:00:00Z", "equity": 500.00},
+    {"time": "2026-03-15T09:35:00Z", "equity": 501.90},
+    {"time": "2026-03-15T09:40:00Z", "equity": 504.05},
+    {"time": "2026-03-15T09:45:00Z", "equity": 503.55},
+    {"time": "2026-03-15T09:50:00Z", "equity": 506.75},
+    {"time": "2026-03-15T10:00:00Z", "equity": 508.10},
+    {"time": "2026-03-15T11:00:00Z", "equity": 511.40},
+    {"time": "2026-03-15T12:00:00Z", "equity": 513.80},
+    {"time": "2026-03-15T13:00:00Z", "equity": 516.20},
+    {"time": "2026-03-15T14:00:00Z", "equity": 517.90},
+    {"time": "2026-03-15T15:00:00Z", "equity": 519.22}
+  ],
+  "bots": {
+    "local": {
+      "running": true,
+      "pid": 1328,
+      "last_scan": "2026-03-15T15:00:00Z"
+    },
+    "nyc": {
+      "running": true,
+      "pid": 9967,
+      "last_scan": "2026-03-15T15:00:00Z"
+    }
+  }
+}

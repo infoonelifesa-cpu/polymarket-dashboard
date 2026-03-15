@@ -1,13 +1,46 @@
 {
   "mode": "paper",
-  "last_updated": "2026-03-15T15:18:02.424722+00:00",
-  "balance": 520.06,
-  "deployed": 0,
+  "last_updated": "2026-03-15T15:33:37.953300+00:00",
+  "balance": 444.33,
+  "deployed": 75.72,
   "starting_balance": 500,
   "total_pnl": 20.06,
   "win_rate": 1.0,
   "total_trades": 18,
-  "positions": [],
+  "positions": [
+    {
+      "question": "Bitcoin Up or Down - March 15, 11:30AM-11:45AM ET",
+      "side": "YES",
+      "entry_price": 0.47234999999999994,
+      "amount": 26.58,
+      "strategy": "ws_negative_risk",
+      "opened_at": "2026-03-15T15:25:22.970073+00:00"
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 11:30AM-11:45AM ET (hedge)",
+      "side": "NO",
+      "entry_price": 0.5025,
+      "amount": 28.28,
+      "strategy": "ws_negative_risk",
+      "opened_at": "2026-03-15T15:25:22.971222+00:00"
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 11:30AM-11:35AM ET",
+      "side": "YES",
+      "entry_price": 0.2613,
+      "amount": 5.59,
+      "strategy": "ws_negative_risk",
+      "opened_at": "2026-03-15T15:30:47.682001+00:00"
+    },
+    {
+      "question": "Bitcoin Up or Down - March 15, 11:30AM-11:35AM ET (hedge)",
+      "side": "NO",
+      "entry_price": 0.7135499999999999,
+      "amount": 15.27,
+      "strategy": "ws_negative_risk",
+      "opened_at": "2026-03-15T15:30:47.683231+00:00"
+    }
+  ],
   "settled_pairs": [
     {
       "question": "Bitcoin Up or Down - March 15, 10:30AM-10:45AM ET",
@@ -180,18 +213,26 @@
     {
       "time": "2026-03-15T15:18:02.424722+00:00",
       "equity": 520.06
+    },
+    {
+      "time": "2026-03-15T15:33:34.222876+00:00",
+      "equity": 520.06
+    },
+    {
+      "time": "2026-03-15T15:33:37.953300+00:00",
+      "equity": 520.06
     }
   ],
   "bots": {
     "local": {
       "running": true,
       "pid": 1328,
-      "last_scan": "2026-03-15T15:18:02.424722+00:00"
+      "last_scan": "2026-03-15T15:33:37.953300+00:00"
     },
     "nyc": {
       "running": true,
-      "pid": 11572,
-      "last_scan": "2026-03-15T15:18:02.424722+00:00"
+      "pid": 11885,
+      "last_scan": "2026-03-15T15:33:37.953300+00:00"
     }
   }
 }
